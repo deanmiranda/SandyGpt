@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sandy GPT Next.JS",
-  description: "Chat.gpt brought to you by Next.js",
+  title: "SandyGPT Chat",
+  description: "SandyGPT Chat brought to you by NextJS",
 };
 
 export default function RootLayout({
