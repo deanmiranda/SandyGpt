@@ -7,6 +7,7 @@ interface GitHubProfile extends Profile {
 }
 
 export const authOptions: AuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ profile }) {
       const gitHubProfile = profile as GitHubProfile;
