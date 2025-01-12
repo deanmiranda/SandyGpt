@@ -5,7 +5,6 @@ import Link from "next/link";
 import "./globals.css";
 import UserButton from "./components/UserButton";
 
-
 export const metadata: Metadata = {
   title: "SandyGPT Chat",
   description: "SandyGPT Chat brought to you by NextJS",
@@ -25,7 +24,6 @@ export default async function RootLayout({
       image: session.user.image,
     };
   }
-
   return (
     <SessionProvider basePath="/api/auth" session={session}>
       <html lang="en">

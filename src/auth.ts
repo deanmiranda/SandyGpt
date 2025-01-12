@@ -14,7 +14,6 @@ const authOptions: NextAuthConfig = {
       clientSecret: process.env.GITHUB_SECRET ?? "",
     }),
   ],
-  basePath: "/api/auth",
   secret: process.env.NEXTAUTH_SECRET,
 };
 
