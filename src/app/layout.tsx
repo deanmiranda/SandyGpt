@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
+import { signIn, signOut, auth } from "@/auth";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SessionProvider } from "./components/SessionProvider";
 import UserButton from "./components/UserButton";
 
 
@@ -21,13 +22,23 @@ export const metadata: Metadata = {
   description: "SandyGPT Chat brought to you by NextJS",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const session = await auth();
+  if (session?.user) {
+    session.user = {
+      name: session.user.name,
+      email: session.user.email,
+      image: session.user.image,
+    };
+  }
+
   return (
-    <SessionProvider>
+    <SessionProvider basePath="/api/auth" session={session}>
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased px-2 md:px-5`}
@@ -54,7 +65,16 @@ export default function RootLayout({
 
               </nav>
               <div>
-                <UserButton />
+                <UserButton
+                  onSignIn={async () => {
+                    "use server";
+                    await signIn();
+                  }}
+                  onSignOut={async () => {
+                    "use server";
+                    await signOut();
+                  }}
+                />
               </div>
             </div>
           </header>

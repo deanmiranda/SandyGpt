@@ -2,14 +2,21 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 // import { useEffect } from "react";
 
 function getFirstTwoCapitalLetters(str?: string | null) {
   const match = (str || "").match(/[A-Z]/g);
   return match ? match.slice(0, 2).join("") : "GT";
 }
-export default function UserButton() {
+
+export default function UserButton({
+  onSignIn,
+  onSignOut,
+}: {
+  onSignIn: () => void;
+  onSignOut: () => void;
+}) {
   const { data: session, status } = useSession();
 
   // console.log("Session and Status:", { session, status });
@@ -21,16 +28,15 @@ export default function UserButton() {
 
   return (
     <div>
-      {status === "authenticated" && session?.user && (
-
+      {status === "authenticated" && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Avatar>
-              {session.user.image ? (
+              {session?.user?.image ? (
                 <AvatarImage src={session.user.image} />
               ) : (
                 <AvatarFallback>
-                  {getFirstTwoCapitalLetters(session.user.name)}
+                  {getFirstTwoCapitalLetters(session?.user?.name)}
                 </AvatarFallback>
               )}
             </Avatar>
@@ -38,7 +44,7 @@ export default function UserButton() {
           <DropdownMenuContent>
             <DropdownMenuItem
               onClick={() => {
-                signOut();
+                onSignOut();
               }}
             >
               Sign Out
@@ -47,7 +53,7 @@ export default function UserButton() {
         </DropdownMenu>
       )}
       {status === "unauthenticated" && (
-        <Button onClick={() => signIn()}>Sign in</Button>
+        <Button onClick={() => onSignIn()}>Sign in</Button>
       )}
     </div>
   );
