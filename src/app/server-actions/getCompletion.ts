@@ -1,8 +1,12 @@
 "use server"
 import OpenAI from "openai";
 
+if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.length === 0) {
+    throw new Error(`OpenAI API key is missing or empty in environment: ${process.env.OPENAI_API_KEY}`);
+}
+
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: process.env.OPENAI_API_KEY!,
 });
 
 export async function getCompletion(

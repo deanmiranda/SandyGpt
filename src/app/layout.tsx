@@ -2,20 +2,9 @@ import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { signIn, signOut, auth } from "@/auth";
 import Link from "next/link";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import UserButton from "./components/UserButton";
 
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "SandyGPT Chat",
@@ -41,7 +30,7 @@ export default async function RootLayout({
     <SessionProvider basePath="/api/auth" session={session}>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased px-2 md:px-5`}
+          className={`antialiased px-2 md:px-5`}
         >
           <header className="bg-white border-b border-gray-200 shadow-md">
             <div className="max-w-6xl mx-auto px-5 py-4 flex justify-between items-center">
