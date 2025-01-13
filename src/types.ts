@@ -18,3 +18,18 @@ export interface StoredMessage extends Message {
 export interface ChatWithMessages extends Chat {
     messages: StoredMessage[];
 }
+
+export interface DatabaseChat {
+    id: number;
+    name: string;
+    user_email: string | null;
+    timestamp: string;
+  }
+  
+  export interface DatabaseMessage {
+    id: number;
+    chat_id: number;
+    role: string;
+    content: string;
+  }
+  

@@ -11,10 +11,18 @@ interface Message {
     content: string;
 }
 
-export default function Chat() {
-    const [messages, setMessages] = useState<Message[]>([]);
+export default function Chat(
+    {
+        id = null,
+        messages: initialMessages = [],
+    }: {
+        id?: number | null;
+        messages?: Message[];   
+    }
+) {
+    const [messages, setMessages] = useState<Message[]>(initialMessages);
     const [message, setMessage] = useState("");
-    const chatId = useRef<number | null>(null);
+    const chatId = useRef<number | null>(id);
 
     const onClick = async () => {
         const completions = await getCompletion( chatId.current, [
