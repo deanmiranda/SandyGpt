@@ -5,6 +5,8 @@ import Chat from "@/app/components/Chat";
 
 import { getChat } from "@/db";
 
+export const dynamic = "force-dynamic";
+
 export default async function ChatDetail({
     params,
 }: {
@@ -18,10 +20,10 @@ export default async function ChatDetail({
     }
 
     // // TODO:  Reroutes users from trying to access a chat id that isn't theirs
-    const session = await getServerSession();
-    if (!session || chat?.user_email !== session?.user?.email) {
-        return redirect("/");
-    }
+    // const session = await getServerSession();
+    // if (!session || chat?.user_email !== session?.user?.email) {
+    //     return redirect("/");
+    // }
 
 
 
