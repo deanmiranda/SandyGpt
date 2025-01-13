@@ -27,7 +27,10 @@ export async function getCompletion(
   console.log("Session user email:", session);
   const response = await openai.chat.completions.create({
     model: "gpt-4o-mini",
-    messages: messageHistory,
+    messages: messageHistory.map((message) => ({
+      role: message.role,
+      content: message.content,
+    })),
   });
 
   const messages = [

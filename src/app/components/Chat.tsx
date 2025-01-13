@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,11 +25,18 @@ export default function Chat(
     const [message, setMessage] = useState("");
     const chatId = useRef<number | null>(id);
 
+    const router = useRouter();
+
+
     const onClick = async () => {
         const completions = await getCompletion( chatId.current, [
             ...messages,
             { role: "user", content: message },
         ]);
+        if(!chatId.current) {
+            router.push(`/chats/${completions.id}`);
+            router.refresh();
+        }
         chatId.current = completions.id;
         setMessage("");
         setMessages(completions.messages);
