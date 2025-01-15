@@ -14,18 +14,17 @@ export default async function ChatDetail({
 }) {
     const { chatId } = await params;
     const chat = await getChat(+chatId);
+    
     // Reroutes nonexisting chats
     if (!chat) {
         return notFound();
     }
 
-    // // TODO:  Reroutes users from trying to access a chat id that isn't theirs
-    // const session = await getServerSession();
-    // if (!session || chat?.user_email !== session?.user?.email) {
-    //     return redirect("/");
-    // }
-
-
+    const session = await getServerSession();
+    // Only check if logged-in user owns this chat
+    if (session?.user?.username && chat.username !== session.user.username) {
+        return redirect("/");
+    }
 
     return (
         <main className="pt-5">

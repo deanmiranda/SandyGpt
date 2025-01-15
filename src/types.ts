@@ -1,7 +1,7 @@
 export interface Chat {
     id: number;
     name: string;
-    user_email: string | null;
+    username: string | null;
     timestamp: Date;
 }
 
@@ -22,7 +22,7 @@ export interface ChatWithMessages extends Chat {
 export interface DatabaseChat {
     id: number;
     name: string;
-    user_email: string | null;
+    username: string | null;
     timestamp: string;
   }
   

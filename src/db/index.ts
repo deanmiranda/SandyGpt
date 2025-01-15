@@ -13,7 +13,7 @@ export async function getChat(chatId: number): Promise<ChatWithMessages | null> 
   const chat: Chat = {
     id: chats[0].id,
     name: chats[0].name,
-    user_email: chats[0].user_email,
+    username: chats[0].username,
     timestamp: new Date(chats[0].timestamp),
   };
 
@@ -32,28 +32,32 @@ export async function getChat(chatId: number): Promise<ChatWithMessages | null> 
 }
 
 
-export async function getChats(userEmail: string): Promise<Chat[]> {
+export async function getChats(username: string): Promise<Chat[]> {
   
-  const chats = await sql`SELECT * FROM chats WHERE user_email = ${userEmail}`;
+  const chats = await sql`SELECT * FROM chats WHERE username = ${username}`;
   return chats.map((chat) => ({
     id: chat.id,
     name: chat.name,
-    user_email: chat.user_email,
+    username: chat.username,
     timestamp: new Date(chat.timestamp),
   })) as Chat[];
 }
 
 
 export async function createChat(
-  userEmail: string | null,
+  username: string | null,
   name: string,
   msgs: Message[]
 ): Promise<number> {
+  // Don't allow chat creation without a user username
+  if (!username) {
+    throw new Error("Cannot create chat without user username");
+  }
+
   const chatResult = await sql`
-    INSERT INTO chats (user_email, name) 
-    VALUES (${userEmail}, ${name}) RETURNING id
+    INSERT INTO chats (username, name) 
+    VALUES (${username}, ${name}) RETURNING id
   `;
-  // console.log("Chat Insert Result:", chatResult);
 
   if (!Array.isArray(chatResult) || chatResult.length === 0 || !chatResult[0]?.id) {
     throw new Error("Failed to create chat. No ID returned.");
@@ -66,7 +70,6 @@ export async function createChat(
       INSERT INTO messages (chat_id, role, content) 
       VALUES (${chatId}, ${msg.role}, ${msg.content}) RETURNING *
     `;
-    // console.log("Message Insert Result:", messageResult);
   }
 
   return chatId;
@@ -74,8 +77,8 @@ export async function createChat(
 
 
 
-export async function getChatsWithMessages(userEmail: string): Promise<ChatWithMessages[]> {
-  const chats = await sql`SELECT * FROM chats WHERE user_email = ${userEmail} ORDER BY timestamp DESC LIMIT 3`;
+export async function getChatsWithMessages(username: string): Promise<ChatWithMessages[]> {
+  const chats = await sql`SELECT * FROM chats WHERE username = ${username} ORDER BY timestamp DESC LIMIT 3`;
 
   const chatWithMessages = await Promise.all(
     chats.map(async (chat) => {
@@ -83,7 +86,7 @@ export async function getChatsWithMessages(userEmail: string): Promise<ChatWithM
       return {
         id: chat.id,
         name: chat.name,
-        user_email: chat.user_email,
+        username: chat.username,
         timestamp: new Date(chat.timestamp),
         messages: messages.map((msg) => ({
           id: msg.id,
