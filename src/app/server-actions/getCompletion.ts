@@ -34,7 +34,7 @@ export async function getCompletion(
 
   const username = session.user.username;
 
-  // console.log("Session user email:", session);
+  // console.log("Session user username:", session);
   const response = await openai.chat.completions.create({
     model: "gpt-4o-mini",
     messages: messageHistory.map((message) => ({

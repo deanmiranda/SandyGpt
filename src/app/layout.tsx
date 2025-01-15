@@ -20,7 +20,7 @@ export default async function RootLayout({
   if (session?.user) {
     session.user = {
       name: session.user.name,
-      email: session.user.email,
+      username: session.user.username,
       image: session.user.image,
     };
   }
