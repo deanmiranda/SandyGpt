@@ -10,18 +10,18 @@ export const dynamic = "force-dynamic";
 export default async function ChatDetail({
     params,
 }: {
-    params: { chatId: string }
+    params: { chatId: string };
 }) {
-    const { chatId } = await params;
+    const { chatId } = await params; 
+
     const chat = await getChat(+chatId);
-    
-    // Reroutes nonexisting chats
+
     if (!chat) {
         return notFound();
     }
 
     const session = await getServerSession();
-    // Only check if logged-in user owns this chat
+
     if (session?.user?.username && chat.username !== session.user.username) {
         return redirect("/");
     }
