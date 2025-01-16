@@ -10,9 +10,9 @@ export const dynamic = "force-dynamic";
 export default async function ChatDetail({
     params,
 }: {
-    params: { chatId: string };
+    params: Promise<{ chatId: string }>; 
 }) {
-    const { chatId } = await params; 
+    const { chatId } = await params;
 
     const chat = await getChat(+chatId);
 
